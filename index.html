@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERITAS Risk Engine - Algorithmic Neutrality Simulator</title>
+    
+    <!-- TailWind CSS Engine -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts Integration -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        security: {
+                            bg: '#0B0F19',
+                            panel: '#151D30',
+                            border: '#24324F',
+                            text: '#F3F4F6',
+                            muted: '#9CA3AF',
+                            accent: '#3B82F6',
+                            emerald: '#10B981',
+                            amber: '#F59E0B',
+                            rose: '#EF4444'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B0F19;
+            color: #F3F4F6;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0F19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #24324F;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3B82F6;
+        }
+        .glow-emerald { box-shadow: 0 0 15px rgba(16, 185, 129, 0.25); }
+        .glow-amber { box-shadow: 0 0 15px rgba(245, 158, 11, 0.25); }
+        .glow-rose { box-shadow: 0 0 15px rgba(239, 68, 68, 0.25); }
+        .glow-accent { box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+    </style>
+</head>
+<body class="bg-security-bg text-security-text min-h-screen flex flex-col justify-between">
+
+    <!-- Header Navigation -->
+    <header class="border-b border-security-border bg-security-panel/90 backdrop-blur sticky top-0 z-50 px-4 py-3 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="h-9 w-9 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-lg flex items-center justify-center glow-accent">
+                    <i class="fa-solid fa-shield-halved text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                        <span>VERITAS</span>
+                        <span class="text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20 px-1.5 py-0.5 rounded font-mono font-normal">v4.12 Risk Engine</span>
+                    </h1>
+                    <p class="text-[10px] text-security-muted font-mono tracking-wider uppercase">Algorithmic Neutrality & Challenger Suite</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 text-xs bg-slate-800/80 border border-security-border rounded-full py-1.5 px-3">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-security-muted font-mono">Facilitator Toolkit Mode</span>
+                </div>
+                <button onclick="resetSimulator()" class="text-xs text-security-muted hover:text-white transition-colors bg-security-border/50 hover:bg-security-border px-3 py-1.5 rounded-lg border border-security-border">
+                    <i class="fa-solid fa-arrows-rotate mr-1"></i> Reset Workshop
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 sm:px-6 flex flex-col justify-center">
+        
+        <!-- SCREEN 1: Welcome & Facilitator Introduction -->
+        <section id="screen-intro" class="space-y-6 max-w-3xl mx-auto">
+            <div class="bg-security-panel rounded-2xl border border-security-border p-6 sm:p-10 glow-accent relative overflow-hidden">
+                <!-- Graphical decorative backdrop grid -->
+                <div class="absolute inset-0 bg-[linear-gradient(to_right,#1f2937_1px,transparent_1px),linear-gradient(to_bottom,#1f2937_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30 pointer-events-none"></div>
+                
+                <div class="relative z-10">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-semibold mb-6">
+                        <i class="fa-solid fa-compass-drafting text-xs"></i> Session 1: Deconstructing Neutrality
+                    </div>
+                    
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-4 tracking-tight leading-tight">
+                        Do You Trust the Platform?
+                    </h2>
+                    
+                    <p class="text-security-muted text-base leading-relaxed mb-6">
+                        Welcome, Security Director. You are the Risk Assessment Lead for a global multinational enterprise. 
+                        Your division has deployed a state-of-the-art AI Travel Risk Assessment Platform. 
+                        Its purpose is to dynamically evaluate employee travel, automate safety audits, and output clinical, data-driven recommendations.
+                    </p>
+
+                    <div class="border-l-4 border-blue-500 bg-blue-500/5 p-4 rounded-r-lg mb-8 space-y-2">
+                        <span class="text-xs font-mono text-blue-400 font-bold uppercase tracking-wider block">Operational Scenario Brief</span>
+                        <p class="text-sm text-gray-300">
+                            Three of your employees have requested travel clearance to <strong>Lagos, Nigeria</strong> for next week. 
+                            The AI Travel platform has completed its background calculations, behavioral modeling, and hazard scanning, delivering three distinct recommendations.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h4 class="text-sm font-semibold tracking-wider text-security-muted uppercase">Your Objective:</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-slate-900/60 p-4 rounded-lg border border-security-border flex gap-3">
+                                <span class="text-blue-500 text-lg font-mono font-bold">01</span>
+                                <p class="text-xs text-gray-300 leading-normal"><strong class="text-white block">Audit Decisions</strong> Inspect recommendation dossiers containing calculated confidence scores.</p>
+                            </div>
+                            <div class="bg-slate-900/60 p-4 rounded-lg border border-security-border flex gap-3">
+                                <span class="text-blue-500 text-lg font-mono font-bold">02</span>
+                                <p class="text-xs text-gray-300 leading-normal"><strong class="text-white block">Submit Votes</strong> Log assessments into the platform's simulated live polling network.</p>
+                            </div>
+                            <div class="bg-slate-900/60 p-4 rounded-lg border border-security-border flex gap-3">
+                                <span class="text-blue-500 text-lg font-mono font-bold">03</span>
+                                <p class="text-xs text-gray-300 leading-normal"><strong class="text-white block">Challenger Framework</strong> Learn how to audit, swap variables, and constructively override outputs.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-security-border/50 flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <span class="text-xs text-security-muted flex items-center gap-1">
+                            <i class="fa-regular fa-clock"></i> Duration: ~15 minutes
+                        </span>
+                        <button onclick="transitionTo('screen-dossiers')" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-medium text-sm px-6 py-3 rounded-lg transition-all duration-200 shadow-lg shadow-blue-500/20 hover:scale-[1.02] flex items-center justify-center gap-2">
+                            Initialize Risk Analysis Dossiers <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 2: Dossier Evaluation & Decisions -->
+        <section id="screen-dossiers" class="hidden space-y-6">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                <div>
+                    <div class="flex items-center gap-2 text-xs font-mono text-blue-400 uppercase tracking-widest mb-1">
+                        <span>Section 01 / Scenario Dossiers</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Evaluate Travel Profiles & Recommendations</h2>
+                    <p class="text-sm text-security-muted">Review each AI recommendation report. Click individual decisions to record your final assessment.</p>
+                </div>
+                
+                <div class="bg-slate-900/90 border border-security-border px-4 py-3 rounded-xl flex items-center gap-4 text-xs font-mono max-w-sm">
+                    <div class="p-2 bg-slate-800 rounded">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-500 text-base"></i>
+                    </div>
+                    <div>
+                        <span class="text-security-muted uppercase block text-[10px] tracking-wider font-bold">Underlying Model logic:</span>
+                        <span class="text-white">Historical travel incident data & predictive behavioral modeling only.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Travellers Dossiers Comparison Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- TRAVELLER A -->
+                <div class="bg-security-panel rounded-xl border border-security-border overflow-hidden flex flex-col justify-between transition-all duration-300 hover:border-slate-700/80">
+                    <div>
+                        <div class="p-5 border-b border-security-border/50 flex justify-between items-start">
+                            <div>
+                                <span class="text-xs font-mono text-security-muted block">TRAVELLER-ID</span>
+                                <h3 class="font-bold text-lg text-white">Traveller A: Male Exec</h3>
+                            </div>
+                            <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] px-2.5 py-1 rounded font-mono font-bold uppercase">
+                                Low Risk
+                            </span>
+                        </div>
+                        
+                        <!-- Profile Card details -->
+                        <div class="p-5 space-y-4">
+                            <div class="space-y-2">
+                                <span class="text-[10px] text-security-muted uppercase font-mono tracking-wider">Demographics & Profile</span>
+                                <div class="bg-slate-900/60 p-3 rounded-lg border border-security-border/50 space-y-2 text-xs">
+                                    <div class="flex justify-between"><span class="text-security-muted">Age / Title:</span> <span class="text-white font-medium">48, Executive</span></div>
+                                    <div class="flex justify-between"><span class="text-security-muted">Destination:</span> <span class="text-white font-medium">Lagos, Nigeria</span></div>
+                                    <div class="flex justify-between"><span class="text-security-muted">Frequency:</span> <span class="text-white font-medium">Frequent Travel to Africa</span></div>
+                                    <div class="flex justify-between"><span class="text-security-muted">Nigeria Visited:</span> <span class="text-white font-medium">6 Times Previously</span></div>
+                                </div>
+                            </div>
+
+                            <div class="bg-emerald-500/5 border border-emerald-500/20 p-4 rounded-lg space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[10px] text-emerald-400 uppercase font-mono tracking-wider">AI Recommendation</span>
+                                    <span class="text-xs font-mono text-emerald-400 font-bold bg-emerald-500/10 px-1.5 py-0.5 rounded">APPROVED</span>
+                                </div>
+                                <div class="space-y-1">
+                                    <div class="flex justify-between text-xs items-center">
+                                        <span class="text-security-muted">Model Confidence:</span>
+                                        <span class="text-emerald-400 font-mono font-bold text-sm">94%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                                        <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 94%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Decisive interactive control for Traveller A -->
+                    <div class="p-5 pt-0">
+                        <label class="text-[10px] text-security-muted font-mono uppercase tracking-wider block mb-2">My Safety Decision:</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="vote('A', 'approve')" id="btn-A-approve" class="vote-btn-A border border-security-border hover:bg-emerald-500/10 text-xs py-2 px-1 text-center rounded-lg transition-all duration-200">
+                                <i class="fa-solid fa-circle-check text-emerald-500 block mb-1"></i> Approve
+                            </button>
+                            <button onclick="vote('A', 'hold')" id="btn-A-hold" class="vote-btn-A border border-security-border hover:bg-amber-500/10 text-xs py-2 px-1 text-center rounded-lg transition-all duration-200">
+                                <i class="fa-solid fa-circle-question text-amber-500 block mb-1"></i> Hold/Info
+                            </button>
+                            <button onclick="vote('A', 'deny')" id="btn-A-deny" class="vote-btn-A border border-security-border hover:bg-rose-500/10 text-xs py-2 px-1 text-center rounded-lg transition-all duration-200">
+                                <i class="fa-solid fa-circle-xmark text-rose-500 block mb-1"></i> Reject
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRAVELLER B -->
+                <div class="bg-security-panel rounded-xl border border-security-border overflow-hidden flex flex-col justify-between transition-all duration-300 hover:border-slate-700/80">
+                    <div>
+                        <div class="p-5 border-b border-security-border/50 flex justify-between items-start">
+                            <div>
+                                <span class="text-xs font-mono text-security-muted block">TRAVELLER-ID</span>
+                                <h3 class="font-bold text-lg text-white">Traveller B: Female PM</h3>
+                            </div>
+                            <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] px-2.5 py-1 rounded font-mono font-bold uppercase">
+                                Medium Risk
+                            </span>
+                        </div>
+                        
+                        <!-- Profile Card details -->
+                        <div class="p-5 space-y-4">
+                            <div class="space-y-2">
+                                <span class="text-[10px] text-security-muted uppercase font-mono tracking-wider">Demographics & Profile</span>
+                                <div class="bg-slate-900/60 p-3 rounded-lg border border-security-border/50 space-y-2 text-xs">
+                                    <div class="flex justify-between"><span class="text-security-muted">Age / Title:</span> <span class="text-white font-medium">32, Project Manager</span></div>
+                                    <div class="flex justify-between"><span class="text-security-muted">Destination:</span> <span class="text-white font-medium">Lagos, Nigeria</span></div>
+                                    <div class="flex justify-between"><span class="text-security-muted">Frequency:</span> <span class="text-white font-medium">First Trip to Nigeria</span></div>
+                                    <div class="flex justify-between"><span class="text-security-muted">Intl Experience:</span> <span class="text-white font-medium">Highly Experienced</span></div>
+                                </div>
+                            </div>
+
+                            <div class="bg-amber-500/5 border border-amber-500/20 p-4 rounded-lg space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[10px] text-amber-400 uppercase font-mono tracking-wider">AI Recommendation</span>
+                                    <span class="text-xs font-mono text-amber-400 font-bold bg-amber-500/10 px-1.5 py-0.5 rounded">CAUTION</span>
+                                </div>
+                                <div class="space-y-1">
+                                    <div class="flex justify-between text-xs items-center">
+                                        <span class="text-security-muted">Model Confidence:</span>
+                                        <span class="text-amber-400 font-mono font-bold text-sm">87%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                                        <div class="bg-amber-500 h-1.5 rounded-full" style="width: 87%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Decisive interactive control for Traveller B -->
+                    <div class="p-5 pt-0">
+                        <label class="text-[10px] text-security-muted font-mono uppercase tracking-wider block mb-2">My Safety Decision:</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="vote('B', 'approve')" id="btn-B-approve" class="vote-btn-B border border-security-border hover:bg-emerald-500/10 text-xs py-2 px-1 text-center rounded-lg transition-all duration-200">
+                                <i class="fa-solid fa-circle-check text-emerald-500 block mb-1"></i> Approve
+                            </button>
+                            <button onclick="vote('B', 'hold')" id="btn-B-hold" class="vote-btn-B border border-security-border hover:bg-amber-500/10 text-xs py-2 px-1 text-center rounded-lg transition-all duration-200">
+                                <i class="fa-solid fa-circle-question text-amber-500 block mb-1"></i> Hold/Info
+                            </button>
+                            <button onclick="vote('B', 'deny')" id="btn-B-deny" class="vote-btn-B border border-security-border hover:bg-rose-500/10 text-xs py-2 px-1 text-center rounded-lg transition-all duration-200">
+                                <i class="fa-solid fa-circle-xmark text-rose-500 block mb-1"></i> Reject
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRAVELLER C -->
+                <div class="bg-security-panel rounded-xl border border-security-border overflow-hidden flex flex-col justify-between transition-all duration-300 hover:border-slate-700/80">
+                    <div>
+                        <div class="p-5 border-b border-security-border/50 flex justify-between items-start">
+                            <div>
+                                <span class="text-xs font-mono text-security-muted block">TRAVELLER-ID</span>
+                                <h3 class="font-bold text-lg text-white">Traveller C: LGBTQ+</h3>
+                            </div>
+                            <span class="bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[10px] px-2.5 py-1 rounded font-mono font-bold uppercase">
+                                High Risk
+                            </span>
+                        </div>
+                        
+                        <!-- Profile Card details -->
+                        <div class="p-5 space-y-4">
+                            <div class="space-y-2">
+                                <span class="text-[10px] text-security-muted uppercase font-mono tracking-wider">Demographics & Profile</span>
+                                <div class="bg-slate-900/60 p-3 rounded-lg border border-security-border/50 space-y-2 text-xs">
+                                    <div class="flex justify-between"><span class="text-security-muted">Age / Title:</span> <span class="text-white font-medium">35, Corporate Advisor</span></div>
+                                    <div class="flex justify-between"><span class="text-security-muted">Destination:</span> <span class="text-white font-medium">Lagos, Nigeria</span></div>
+                                    <div class="flex justify-between"><span class="text-security-muted">Demographics:</span> <span class="text-rose-400 font-semibold flex items-center gap-1"><i class="fa-solid fa-rainbow"></i> LGBTQ+ Status</span></div>
+                                    <div class="flex justify-between"><span class="text-security-muted">Previous Africa Travel:</span> <span class="text-white font-medium">Yes, Extensive</span></div>
+                                </div>
+                            </div>
+
+                            <div class="bg-rose-500/5 border border-rose-500/20 p-4 rounded-lg space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[10px] text-rose-400 uppercase font-mono tracking-wider">AI Recommendation</span>
+                                    <span class="text-xs font-mono text-rose-400 font-bold bg-rose-500/10 px-1.5 py-0.5 rounded">DENY</span>
+                                </div>
+                                <div class="space-y-1">
+                                    <div class="flex justify-between text-xs items-center">
+                                        <span class="text-security-muted">Model Confidence:</span>
+                                        <span class="text-rose-400 font-mono font-bold text-sm">91%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                                        <div class="bg-rose-500 h-1.5 rounded-full" style="width: 91%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Decisive interactive control for Traveller C -->
+                    <div class="p-5 pt-0">
+                        <label class="text-[10px] text-security-muted font-mono uppercase tracking-wider block mb-2">My Safety Decision:</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="vote('C', 'approve')" id="btn-C-approve" class="vote-btn-C border border-security-border hover:bg-emerald-500/10 text-xs py-2 px-1 text-center rounded-lg transition-all duration-200">
+                                <i class="fa-solid fa-circle-check text-emerald-500 block mb-1"></i> Approve
+                            </button>
+                            <button onclick="vote('C', 'hold')" id="btn-C-hold" class="vote-btn-C border border-security-border hover:bg-amber-500/10 text-xs py-2 px-1 text-center rounded-lg transition-all duration-200">
+                                <i class="fa-solid fa-circle-question text-amber-500 block mb-1"></i> Hold/Info
+                            </button>
+                            <button onclick="vote('C', 'deny')" id="btn-C-deny" class="vote-btn-C border border-security-border hover:bg-rose-500/10 text-xs py-2 px-1 text-center rounded-lg transition-all duration-200">
+                                <i class="fa-solid fa-circle-xmark text-rose-500 block mb-1"></i> Reject
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Workshop Discussion Overlay Questions Box -->
+            <div class="bg-slate-900/60 rounded-xl border border-security-border p-5 space-y-4">
+                <div class="flex items-center gap-2">
+                    <span class="flex h-2 w-2 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                    </span>
+                    <h4 class="text-xs font-bold text-blue-400 uppercase tracking-wider font-mono">Facilitator Prompt: Group Calibration (3-5 min)</h4>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <ul class="space-y-2 list-disc pl-4 text-gray-300">
+                        <li>Which of the three profiles did you trust automatically? Why?</li>
+                        <li>Did the <strong class="text-white">exact confidence percentages (e.g. 91% for Traveller C)</strong> make the recommendation feel more robust?</li>
+                    </ul>
+                    <ul class="space-y-2 list-disc pl-4 text-gray-300">
+                        <li>Do we understand how the platform measures "Medium Risk" versus "High Risk," or are we accepting it at face value?</li>
+                        <li>What assumptions do we think the underlying model has made?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-4">
+                <button id="btn-submit-votes" disabled onclick="transitionTo('screen-polling')" class="w-full sm:w-auto bg-slate-800 text-slate-500 border border-security-border font-medium text-sm px-8 py-3.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 cursor-not-allowed font-semibold">
+                    Submit Decisions to Live Workshop Poll <i class="fa-solid fa-chart-bar"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- SCREEN 3: Live Polling & Voting Results comparison -->
+        <section id="screen-polling" class="hidden space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                <div>
+                    <div class="flex items-center gap-2 text-xs font-mono text-blue-400 uppercase tracking-widest mb-1">
+                        <span>Section 02 / Live Polling Comparison</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Active Room Voting Data</h2>
+                    <p class="text-sm text-security-muted">Compare your assessment decisions alongside historical aggregate votes from 120 global Security Directors.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Poll Card Traveller A -->
+                <div class="bg-security-panel border border-security-border rounded-xl p-5 space-y-4">
+                    <div class="flex justify-between items-center border-b border-security-border/50 pb-3">
+                        <div>
+                            <span class="text-[10px] text-security-muted font-mono block">TRAVELLER A</span>
+                            <h3 class="text-sm font-bold text-white">Male Exec (94% Conf)</h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[10px] text-security-muted block font-mono">YOUR VOTE:</span>
+                            <span id="user-vote-A" class="text-xs font-bold uppercase">-</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Simulated live vote charts -->
+                    <div class="space-y-4 pt-2">
+                        <span class="text-[10px] text-security-muted font-mono uppercase tracking-wider block">Aggregate Security Directors' Votes:</span>
+                        
+                        <div class="space-y-3">
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-gray-300">Approve Trip</span>
+                                    <span class="font-bold text-emerald-400">88%</span>
+                                </div>
+                                <div class="w-full bg-slate-900 rounded-full h-2 border border-security-border/50">
+                                    <div class="bg-gradient-to-r from-emerald-600 to-emerald-400 h-2 rounded-full" style="width: 88%"></div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-gray-300">Hold / Need More Info</span>
+                                    <span class="font-bold text-amber-400">10%</span>
+                                </div>
+                                <div class="w-full bg-slate-900 rounded-full h-2 border border-security-border/50">
+                                    <div class="bg-gradient-to-r from-amber-600 to-amber-400 h-2 rounded-full" style="width: 10%"></div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-gray-300">Reject Trip</span>
+                                    <span class="font-bold text-rose-400">2%</span>
+                                </div>
+                                <div class="w-full bg-slate-900 rounded-full h-2 border border-security-border/50">
+                                    <div class="bg-gradient-to-r from-rose-600 to-rose-400 h-2 rounded-full" style="width: 2%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/40 p-3 rounded border border-security-border/50 text-[11px] text-security-muted">
+                            <i class="fa-solid fa-circle-info text-blue-400 mr-1"></i> Broad consensus of automatic trust. Directors stated: "With 6 successful trips and 94% system confidence, we have a clear audit trail."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Poll Card Traveller B -->
+                <div class="bg-security-panel border border-security-border rounded-xl p-5 space-y-4">
+                    <div class="flex justify-between items-center border-b border-security-border/50 pb-3">
+                        <div>
+                            <span class="text-[10px] text-security-muted font-mono block">TRAVELLER B</span>
+                            <h3 class="text-sm font-bold text-white">Female PM (87% Conf)</h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[10px] text-security-muted block font-mono">YOUR VOTE:</span>
+                            <span id="user-vote-B" class="text-xs font-bold uppercase">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 pt-2">
+                        <span class="text-[10px] text-security-muted font-mono uppercase tracking-wider block">Aggregate Security Directors' Votes:</span>
+                        
+                        <div class="space-y-3">
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-gray-300">Approve Trip</span>
+                                    <span class="font-bold text-emerald-400">22%</span>
+                                </div>
+                                <div class="w-full bg-slate-900 rounded-full h-2 border border-security-border/50">
+                                    <div class="bg-gradient-to-r from-emerald-600 to-emerald-400 h-2 rounded-full" style="width: 22%"></div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-gray-300">Hold / Need More Info</span>
+                                    <span class="font-bold text-amber-400">73%</span>
+                                </div>
+                                <div class="w-full bg-slate-900 rounded-full h-2 border border-security-border/50">
+                                    <div class="bg-gradient-to-r from-amber-600 to-amber-400 h-2 rounded-full" style="width: 73%"></div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-gray-300">Reject Trip</span>
+                                    <span class="font-bold text-rose-400">5%</span>
+                                </div>
+                                <div class="w-full bg-slate-900 rounded-full h-2 border border-security-border/50">
+                                    <div class="bg-gradient-to-r from-rose-600 to-rose-400 h-2 rounded-full" style="width: 5%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/40 p-3 rounded border border-security-border/50 text-[11px] text-security-muted">
+                            <i class="fa-solid fa-circle-info text-blue-400 mr-1"></i> A cautious middle ground. Most directors flag her for a manual briefing because it is her first arrival in Nigeria.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Poll Card Traveller C -->
+                <div class="bg-security-panel border border-security-border rounded-xl p-5 space-y-4">
+                    <div class="flex justify-between items-center border-b border-security-border/50 pb-3">
+                        <div>
+                            <span class="text-[10px] text-security-muted font-mono block">TRAVELLER C</span>
+                            <h3 class="text-sm font-bold text-white">LGBTQ+ Advisor (91% Conf)</h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[10px] text-security-muted block font-mono">YOUR VOTE:</span>
+                            <span id="user-vote-C" class="text-xs font-bold uppercase">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 pt-2">
+                        <span class="text-[10px] text-security-muted font-mono uppercase tracking-wider block">Aggregate Security Directors' Votes:</span>
+                        
+                        <div class="space-y-3">
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-gray-300">Approve Trip</span>
+                                    <span class="font-bold text-emerald-400">4%</span>
+                                </div>
+                                <div class="w-full bg-slate-900 rounded-full h-2 border border-security-border/50">
+                                    <div class="bg-gradient-to-r from-emerald-600 to-emerald-400 h-2 rounded-full" style="width: 4%"></div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-gray-300">Hold / Need More Info</span>
+                                    <span class="font-bold text-amber-400">11%</span>
+                                </div>
+                                <div class="w-full bg-slate-900 rounded-full h-2 border border-security-border/50">
+                                    <div class="bg-gradient-to-r from-amber-600 to-amber-400 h-2 rounded-full" style="width: 11%"></div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-gray-300">Reject Trip</span>
+                                    <span class="font-bold text-rose-400">85%</span>
+                                </div>
+                                <div class="w-full bg-slate-900 rounded-full h-2 border border-security-border/50">
+                                    <div class="bg-gradient-to-r from-rose-600 to-rose-400 h-2 rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/40 p-3 rounded border border-security-border/50 text-[11px] text-security-muted">
+                            <i class="fa-solid fa-circle-info text-blue-400 mr-1"></i> Significant compliance bias. Directors stated: "We cannot override a 91% High Risk rating. If an incident occurs, our legal liability would be extreme."
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Facilitator Debrief Interactive Prompt -->
+            <div class="bg-slate-900/85 rounded-xl border-2 border-dashed border-security-border p-6 space-y-4">
+                <div class="flex gap-3 items-start">
+                    <div class="p-3 bg-blue-500/10 rounded-xl border border-blue-500/20 text-blue-400 text-lg">
+                        <i class="fa-solid fa-quote-left"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white text-base">Wait! Let's Audit our Intuitions:</h4>
+                        <p class="text-sm text-security-muted mt-1 leading-relaxed">
+                            Before we reveal the algorithmic architecture beneath, take 60 seconds to examine the voting patterns. Ask the room:
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            <div class="bg-security-panel p-3.5 rounded-lg border border-security-border text-xs text-gray-200">
+                                <strong>"The Precision Trap"</strong><br>
+                                <span class="text-security-muted mt-1 block">How much did the precise "91% confidence score" pressure you into choosing "Reject" for Traveller C?</span>
+                            </div>
+                            <div class="bg-security-panel p-3.5 rounded-lg border border-security-border text-xs text-gray-200">
+                                <strong>"Implicit Credibility"</strong><br>
+                                <span class="text-security-muted mt-1 block">Why did we trust Traveller A's low risk status without asking what data points were used to verify it?</span>
+                            </div>
+                            <div class="bg-security-panel p-3.5 rounded-lg border border-security-border text-xs text-gray-200">
+                                <strong>"Standard of Certainty"</strong><br>
+                                <span class="text-security-muted mt-1 block">Did we require a higher standard of manual evidence to override a "Deny" than to agree with an "Approved"?</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button onclick="transitionTo('screen-reveal')" class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-sm px-8 py-4 rounded-lg transition-all duration-200 glow-accent hover:scale-[1.01] flex items-center justify-center gap-2">
+                    Deconstruct the Platform: Reveal the Biases <i class="fa-solid fa-mask"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- SCREEN 4: The Reveal (Three Hidden Biases) -->
+        <section id="screen-reveal" class="hidden space-y-8">
+            <div class="border-b border-security-border pb-4">
+                <div class="flex items-center gap-2 text-xs font-mono text-rose-400 uppercase tracking-widest mb-1">
+                    <i class="fa-solid fa-triangle-exclamation animate-pulse"></i> Operational Reality Deconstruction
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">The Reality: How Bias Arrives Disguised as Objectivity</h2>
+                <p class="text-sm text-security-muted">Algorithmic risk assessments are not neutral reflections of reality. Here are the three distinct ways neutrality is constructed.</p>
+            </div>
+
+            <!-- Three bias deconstruction blocks -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- BIAS 1 CARD -->
+                <div class="bg-security-panel border border-security-border rounded-xl flex flex-col justify-between overflow-hidden">
+                    <div class="p-5 space-y-4">
+                        <div class="flex justify-between items-start">
+                            <span class="text-xs font-mono text-rose-400 uppercase font-bold tracking-widest">HIDDEN BIAS #01</span>
+                            <span class="p-1.5 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-lg text-xs font-mono font-semibold">DATA BIAS</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-white">Historical Data Bias</h3>
+                        <p class="text-xs text-security-muted leading-relaxed">
+                            The platform's high confidence scores rely heavily on historical incident catalogs. But historical data does not represent safety; it represents <strong>reported records</strong>.
+                        </p>
+                        
+                        <div class="bg-slate-900/80 p-3 rounded-lg border border-security-border space-y-2 text-xs">
+                            <span class="font-mono text-[10px] text-rose-400 font-bold block uppercase">How it works here:</span>
+                            <p class="text-gray-300">
+                                If a multinational company's local reporting channels primarily register security incidents impacting high-ranking, foreign executives, the database reflects those specific anomalies, skewing "normal" risk.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="p-5 border-t border-security-border/50 bg-slate-900/30">
+                        <span class="text-[10px] font-mono text-blue-400 uppercase tracking-widest block mb-1">Critical Question to Ask:</span>
+                        <p class="text-xs font-semibold text-white">"Is this machine learning travel risk, or is it learning what gets documented?"</p>
+                    </div>
+                </div>
+
+                <!-- BIAS 2 CARD (REWORKED WITH THE REAL-WORLD LEGAL HAZARD DEBATE) -->
+                <div class="bg-security-panel border-2 border-amber-500/50 rounded-xl flex flex-col justify-between overflow-hidden relative">
+                    <div class="absolute top-0 right-0 bg-amber-500 text-slate-950 font-mono font-bold text-[9px] px-2 py-0.5 rounded-bl">KEY SECURITY DEBATE</div>
+                    <div class="p-5 space-y-4">
+                        <div class="flex justify-between items-start">
+                            <span class="text-xs font-mono text-amber-400 uppercase font-bold tracking-widest">HIDDEN BIAS #02</span>
+                            <span class="p-1.5 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-lg text-xs font-mono font-semibold">THE DECISION TRAP</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-white">Threat Assessment vs. Decision Banning</h3>
+                        <p class="text-xs text-security-muted leading-relaxed">
+                            Nigeria's hostile legal environment for LGBTQ+ individuals is a <strong>real hazard</strong>. The model is correct to identify it. But the model's failure is treating a threat as an automatic, lazy <strong>"DENY"</strong>.
+                        </p>
+                        
+                        <div class="bg-slate-900/80 p-3 rounded-lg border border-security-border space-y-2 text-xs">
+                            <span class="font-mono text-[10px] text-amber-400 font-bold block uppercase">The Compliance Cop-Out:</span>
+                            <p class="text-gray-300">
+                                When AI automatically denies travel, it takes away human agency. Instead of engineering safety solutions to support the employee, the system defaults to corporate exclusion, letting external laws restrict internal career advancement.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="p-5 border-t border-security-border/50 bg-slate-900/30">
+                        <span class="text-[10px] font-mono text-amber-400 uppercase tracking-widest block mb-1">The Human Security Role:</span>
+                        <p class="text-xs font-semibold text-white">"Acknowledge the legal threat, override the lazy auto-denial, and securely enable the trip with physical mitigation."</p>
+                    </div>
+                </div>
+
+                <!-- BIAS 3 CARD -->
+                <div class="bg-security-panel border border-security-border rounded-xl flex flex-col justify-between overflow-hidden relative">
+                    <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
+                    <div class="p-5 space-y-4">
+                        <div class="flex justify-between items-start">
+                            <span class="text-xs font-mono text-blue-400 uppercase font-bold tracking-widest">HIDDEN BIAS #03</span>
+                            <span class="p-1.5 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-lg text-xs font-mono font-semibold">METRICS</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-white">Authority Through Numbers</h3>
+                        <p class="text-xs text-security-muted leading-relaxed">
+                            Adding a highly precise metric like <strong>"91% Confidence"</strong> creates an illusion of certainty. We bypass critical evaluation because we naturally trust mathematical precision.
+                        </p>
+                        
+                        <div class="bg-slate-900/80 p-3 rounded-lg border border-security-border space-y-2 text-xs">
+                            <span class="font-mono text-[10px] text-blue-400 font-bold block uppercase">The Confidence Illusion Decoded:</span>
+                            <p class="text-gray-300">
+                                In ML, "91% confidence" does not mean 91% risk. It simply means: <em>"This query aligns 91% with the patterns of our (historically biased) training dataset."</em>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="p-5 border-t border-security-border/50 bg-slate-900/30">
+                        <span class="text-[10px] font-mono text-blue-400 uppercase tracking-widest block mb-1">Critical Question to Ask:</span>
+                        <p class="text-xs font-semibold text-white">"Are we trusting the underlying evidence, or trusting the expert style of presentation?"</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Interactive transition block -->
+            <div class="bg-gradient-to-tr from-slate-900 to-security-panel border border-security-border p-6 sm:p-8 rounded-2xl relative overflow-hidden">
+                <div class="absolute -right-12 -bottom-12 h-44 w-44 bg-blue-500/5 rounded-full blur-3xl"></div>
+                
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
+                    <div class="space-y-3 max-w-2xl">
+                        <span class="text-[10px] font-mono text-blue-400 uppercase tracking-wider font-bold block">Session transition</span>
+                        <h3 class="text-xl font-bold text-white">From Passive Observer to Active Auditor</h3>
+                        <p class="text-xs text-gray-300 leading-relaxed">
+                            Identifying neutrality's construction is only half the battle. Now, we must move to <strong>Learning Outcome 2</strong>: 
+                            How do we challenge these recommendations without being branded as obstructive, anti-technology, or emotional? 
+                        </p>
+                        <p class="text-xs text-security-muted italic">
+                            Let's step into the Challenger Framework Sandbox to systematically deconstruct the model's 91% "High Risk" rating on Traveller C.
+                        </p>
+                    </div>
+                    
+                    <div class="w-full md:w-auto flex flex-col gap-2">
+                        <button onclick="transitionTo('screen-challenger')" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm px-6 py-3.5 rounded-lg transition-all duration-200 shadow-md shadow-blue-500/10 flex items-center justify-center gap-2">
+                            Launch Challenger Framework Sandbox <i class="fa-solid fa-angles-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 5: Learning Outcome 2: Challenger Framework Sandbox -->
+        <section id="screen-challenger" class="hidden space-y-6">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                <div>
+                    <div class="flex items-center gap-2 text-xs font-mono text-emerald-400 uppercase tracking-widest mb-1">
+                        <span>Section 03 / Learning Outcome 2: Challenger Framework</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">The Challenger Framework Sandbox</h2>
+                    <p class="text-sm text-security-muted">Don't argue with the math; audit the logic. Apply counterfactual tests, data provenance scans, and mitigation builders.</p>
+                </div>
+                
+                <div class="bg-slate-900/90 border border-security-border px-4 py-3 rounded-xl flex items-center gap-3 text-xs font-mono max-w-xs">
+                    <div class="p-1.5 bg-emerald-500/10 text-emerald-400 rounded">
+                        <i class="fa-solid fa-calculator text-sm"></i>
+                    </div>
+                    <div>
+                        <span class="text-security-muted uppercase block text-[10px] tracking-wider font-semibold">Challenger Status:</span>
+                        <span id="challenger-status" class="text-white">Awaiting Diagnostics</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenger Workbench -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <!-- STEP 1: Counterfactual Testing (Left side) -->
+                <div class="lg:col-span-4 bg-security-panel rounded-xl border border-security-border p-5 flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">Pillar 01 / Sensitivity</span>
+                            <span class="text-[10px] bg-slate-800 text-gray-300 border border-security-border px-2 py-0.5 rounded font-mono font-normal">Counterfactual Test</span>
+                        </div>
+                        <h3 class="font-bold text-base text-white">1. Demographic Sensitivity Test</h3>
+                        <p class="text-xs text-security-muted leading-relaxed">
+                            Test whether the model treats identity as an absolute bar to travel, or if it can scale its recommendations. If swapping the demographic parameter changes the rating from high-risk to fully-approved without offering alternative paths, the algorithm is acting as a blunt policy enforcer, not a risk optimizer.
+                        </p>
+                        
+                        <!-- Toggle Controls -->
+                        <div class="bg-slate-900/80 p-4 rounded-lg border border-security-border space-y-4 text-xs mt-2">
+                            <div class="space-y-1.5">
+                                <label class="text-[10px] text-security-muted font-mono uppercase tracking-widest block">Traveler Demographic Parameter:</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="toggleCounterfactual('lgbtq')" id="toggle-lgbtq" class="py-2 px-3 border border-emerald-500 bg-emerald-500/10 text-emerald-400 font-bold rounded-lg text-center transition-all duration-200">
+                                        LGBTQ+ Advisor
+                                    </button>
+                                    <button onclick="toggleCounterfactual('standard')" id="toggle-standard" class="py-2 px-3 border border-security-border hover:bg-slate-800 text-security-muted rounded-lg text-center transition-all duration-200">
+                                        Standard Advisor
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="text-[10px] text-security-muted leading-normal font-mono border-t border-security-border/50 pt-2.5">
+                                Note: Destination (Lagos) and prior travel history are identical.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sandbox AI Output Display -->
+                    <div id="sandbox-output" class="bg-rose-950/20 border border-rose-900/40 p-4 rounded-lg space-y-3 transition-all duration-300">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-mono text-rose-400 uppercase tracking-widest">AI DECISION MATRIX</span>
+                            <span id="sandbox-badge" class="text-[10px] font-mono font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20 px-1.5 py-0.5 rounded">DENY</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-security-muted">Risk Prediction:</span>
+                            <span id="sandbox-risk" class="font-bold text-rose-400">HIGH RISK</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-security-muted">Model Confidence:</span>
+                            <span id="sandbox-conf" class="font-mono font-bold text-rose-400">91%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Provenance Query (Middle) -->
+                <div class="lg:col-span-4 bg-security-panel rounded-xl border border-security-border p-5 flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">Pillar 02 / Transparency</span>
+                            <span class="text-[10px] bg-slate-800 text-gray-300 border border-security-border px-2 py-0.5 rounded font-mono font-normal">Provenance Scan</span>
+                        </div>
+                        <h3 class="font-bold text-base text-white">2. Data Provenance Check</h3>
+                        <p class="text-xs text-security-muted leading-relaxed">
+                            Interrogate the dataset, not the math. Ask: What dataset was used to calculate this 91% confidence, and what is its age and geographical granularity?
+                        </p>
+                        
+                        <div class="space-y-2 mt-2">
+                            <button onclick="scanProvenance()" id="btn-scan" class="w-full bg-slate-800 hover:bg-slate-700 text-white border border-security-border py-2.5 px-4 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-colors">
+                                <i class="fa-solid fa-magnifying-glass-chart"></i> Scan Underlying Database Records
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Scan Results Panel -->
+                    <div id="provenance-results" class="bg-slate-900/60 rounded-lg border border-security-border p-4 h-48 flex items-center justify-center text-center transition-all duration-300 overflow-y-auto">
+                        <span id="provenance-placeholder" class="text-xs text-security-muted italic font-mono">Click scan to interrogate model datasets...</span>
+                        <div id="provenance-data" class="hidden text-left space-y-2 w-full text-xs font-mono">
+                            <div class="text-rose-400 font-bold uppercase border-b border-security-border/50 pb-1 text-[10px]">Data Audit Findings:</div>
+                            <div class="flex justify-between text-[11px]"><span class="text-security-muted">Total Lagos incidents:</span> <span class="text-white">12 Reports</span></div>
+                            <div class="flex justify-between text-[11px]"><span class="text-security-muted">Dataset Date Range:</span> <span class="text-white">2010 - 2013</span></div>
+                            <div class="flex justify-between text-[11px]"><span class="text-security-muted">Localized reports (2014-2026):</span> <span class="text-amber-400 font-bold">0 Records Found</span></div>
+                            <p class="text-[10px] text-security-muted leading-relaxed pt-1 font-sans font-normal text-slate-300">
+                                <strong>Conclusion:</strong> The "High Risk" confidence rating relies on a legacy 13-year-old catalog with no updated local updates.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Operational Mitigation Planner (Right side) -->
+                <div class="lg:col-span-4 bg-security-panel rounded-xl border border-security-border p-5 flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">Pillar 03 / Enabling</span>
+                            <span class="text-[10px] bg-slate-800 text-gray-300 border border-security-border px-2 py-0.5 rounded font-mono font-normal">Security Blueprint</span>
+                        </div>
+                        <h3 class="font-bold text-base text-white">3. Build Mitigation Blueprint</h3>
+                        <p class="text-xs text-security-muted leading-relaxed">
+                            Never bring a flat override request to leadership without operational solutions. Present proactive mitigations that ensure safety while enabling necessary travel.
+                        </p>
+                        
+                        <!-- Interative checklist -->
+                        <div class="bg-slate-900/60 p-3.5 rounded-lg border border-security-border space-y-2 text-xs">
+                            <span class="text-[10px] text-security-muted uppercase font-mono tracking-widest block mb-1">Select Security Controls:</span>
+                            <label class="flex items-center gap-2 text-gray-300 cursor-pointer">
+                                <input type="checkbox" id="mit-1" onchange="updateMitigationCount()" class="rounded border-security-border bg-slate-950 text-emerald-500 focus:ring-emerald-500 h-4 w-4">
+                                <span>Vetted Secure Airport Shuttle Transfer</span>
+                            </label>
+                            <label class="flex items-center gap-2 text-gray-300 cursor-pointer">
+                                <input type="checkbox" id="mit-2" onchange="updateMitigationCount()" class="rounded border-security-border bg-slate-950 text-emerald-500 focus:ring-emerald-500 h-4 w-4">
+                                <span>Designated Vetted Corporate Safe-House</span>
+                            </label>
+                            <label class="flex items-center gap-2 text-gray-300 cursor-pointer">
+                                <input type="checkbox" id="mit-3" onchange="updateMitigationCount()" class="rounded border-security-border bg-slate-950 text-emerald-500 focus:ring-emerald-500 h-4 w-4">
+                                <span>Mandatory 12-Hour Remote Check-Ins</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Export Report Action -->
+                    <div>
+                        <button id="btn-export" disabled onclick="transitionTo('screen-reframe')" class="w-full bg-slate-800 text-slate-500 border border-security-border py-3 px-4 rounded-lg text-xs font-bold flex items-center justify-center gap-2 cursor-not-allowed transition-all">
+                            Generate C-Suite Challenger Brief <i class="fa-solid fa-file-contract"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Group Discussion Prompts -->
+            <div class="bg-slate-900/60 rounded-xl border border-security-border p-5 space-y-3 text-xs">
+                <div class="flex items-center gap-2">
+                    <span class="flex h-2 w-2 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <h4 class="font-bold text-emerald-400 uppercase tracking-wider font-mono">Challenger Workshop Discussion Script</h4>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300 text-xs sm:text-sm">
+                    <p>
+                        <strong>Facilitator:</strong> Point out how easily the AI's 91% rating of High Risk was exposed. 
+                        By changing the demographic field from <strong class="text-white">LGBTQ+</strong> to <strong class="text-white">Standard</strong>, 
+                        the confidence of the model dramatically swapped to Approved. This is concrete proof that proxy variables are skewing outcomes.
+                    </p>
+                    <p>
+                        <strong>Ask the Room:</strong> "If we simply presented a raw objection, the C-suite would call us risk-averse or anti-technology. 
+                        But since we scanned the data age, exposed the proxy bias, and presented a physical mitigation plan, who has the stronger authority now?"
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 5.5: C-Suite Brief Preview & Core Learning 3 -->
+        <section id="screen-reframe" class="hidden space-y-6 max-w-5xl mx-auto">
+            <div class="border-b border-security-border pb-4">
+                <div class="flex items-center gap-2 text-xs font-mono text-emerald-400 uppercase tracking-widest mb-1">
+                    <i class="fa-solid fa-file-invoice animate-pulse"></i> Operational Diagnostic Output
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">C-Suite Override Brief & Strategic Core Shift</h2>
+                <p class="text-sm text-security-muted">Review the output memo constructed by your diagnostics, followed by the foundational ethical shift of the Challenger Framework.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left: Beautiful generated memo template (Softer Tone) -->
+                <div class="lg:col-span-7 bg-white text-slate-900 rounded-xl p-6 sm:p-8 shadow-2xl relative border-t-8 border-emerald-600 font-sans max-h-[650px] overflow-y-auto">
+                    <div class="absolute top-4 right-4 bg-emerald-100 text-emerald-800 text-[9px] font-mono font-bold px-2.5 py-1 rounded">MEMO READY</div>
+                    
+                    <div class="space-y-3 border-b border-slate-200 pb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="h-6 w-6 bg-emerald-600 rounded flex items-center justify-center text-white text-xs"><i class="fa-solid fa-shield"></i></span>
+                            <span class="text-xs font-mono tracking-widest font-bold text-slate-500">VERITAS SECURITY GROUP</span>
+                        </div>
+                        <h3 class="text-md font-bold uppercase tracking-tight text-slate-800">Travel Approval Recommendation – Traveller C (Lagos)</h3>
+                    </div>
+
+                    <div class="py-3 space-y-1.5 text-xs border-b border-slate-200 font-mono">
+                        <div class="grid grid-cols-4"><span class="font-bold text-slate-500">TO:</span> <span class="col-span-3 text-slate-800">Executive Team</span></div>
+                        <div class="grid grid-cols-4"><span class="font-bold text-slate-500">FROM:</span> <span class="col-span-3 text-slate-800">Director of Security & Risk</span></div>
+                    </div>
+
+                    <div class="py-4 space-y-4 text-xs leading-relaxed text-slate-700">
+                        <div>
+                            <span class="font-bold text-slate-800 block mb-1 font-mono uppercase text-[10px] tracking-wider text-emerald-700">Recommendation:</span>
+                            <p class="font-semibold text-slate-900">
+                                I recommend approving travel for Traveller C, despite the platform's automated "Do Not Approve" recommendation.
+                            </p>
+                        </div>
+
+                        <div>
+                            <span class="font-bold text-slate-800 block mb-1 font-mono uppercase text-[10px] tracking-wider text-slate-500">Why We Challenged the Recommendation:</span>
+                            <p>
+                                As part of our review, we tested how the system arrived at its decision. We found that changing certain personal characteristics significantly altered the recommendation, even though the travel conditions themselves remained the same. This suggests the model may be relying heavily on historical patterns and assumptions rather than the current on-the-ground situation.
+                            </p>
+                        </div>
+
+                        <div>
+                            <span class="font-bold text-slate-800 block mb-1 font-mono uppercase text-[10px] tracking-wider text-slate-500">What We Found:</span>
+                            <p>
+                                We also reviewed the information behind the system's reported "91% confidence" score. The confidence rating appears to be based largely on historical incident data, much of which is over a decade old. There is limited evidence that recent local intelligence or current operating conditions were given significant weight in the assessment.
+                            </p>
+                        </div>
+
+                        <div>
+                            <span class="font-bold text-slate-800 block mb-1 font-mono uppercase text-[10px] tracking-wider text-slate-500">Risk Mitigations in Place:</span>
+                            <p class="mb-2">Rather than relying solely on the automated recommendation, we assessed the trip in context and implemented additional safeguards:</p>
+                            <ul id="dynamic-brief-mitigations" class="space-y-1.5 pl-4 list-disc font-medium text-slate-800">
+                                <!-- Dynamic mitigations inject here with softer tone -->
+                            </ul>
+                        </div>
+
+                        <div>
+                            <span class="font-bold text-slate-800 block mb-1 font-mono uppercase text-[10px] tracking-wider text-slate-500">Decision:</span>
+                            <p>
+                                While travel to Lagos carries known risks, these risks can be managed appropriately through targeted controls and active oversight. Based on the available evidence, I am satisfied that our duty of care obligations are being met and recommend that travel proceeds.
+                            </p>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-200 mt-4">
+                            <span class="font-bold text-slate-800 block mb-1 font-mono uppercase text-[10px] tracking-wider text-blue-700">Model Improvement Opportunities:</span>
+                            <p class="mb-2">
+                                This review highlights several opportunities to improve future recommendations and increase confidence in the platform's outputs. To strengthen assessments for Nigeria and similar destinations, we recommend incorporating:
+                            </p>
+                            <ul class="space-y-1 pl-4 list-disc text-slate-800 font-medium">
+                                <li>Current local intelligence feeds alongside historical incident data</li>
+                                <li>Real-time developments, including protests, crime trends and transport disruptions</li>
+                                <li>Local partner and ground-support assessments</li>
+                                <li>Traveller-specific mitigation measures already in place</li>
+                                <li>Lived experiences and feedback from employees operating in-country</li>
+                            </ul>
+                            <p class="mt-2 text-slate-600 italic">
+                                As new information becomes available, it should be fed back into the system to continuously retrain and refine the model. Overrides and post-trip feedback should be treated as valuable learning opportunities, helping improve future recommendations while ensuring human judgement remains central to decision-making.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: The 3rd Core Learning Deconstruction -->
+                <div class="lg:col-span-5 bg-gradient-to-br from-security-panel to-slate-900 border border-security-border rounded-xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                    <div class="space-y-4">
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-semibold">
+                            <i class="fa-solid fa-graduation-cap"></i> THE STRATEGIC PARADIGM SHIFT
+                        </div>
+                        
+                        <h3 class="text-xl font-bold text-white tracking-tight leading-tight">Reframing AI Outputs: Signals vs. Decisions</h3>
+                        
+                        <div class="space-y-4 text-xs text-security-muted leading-relaxed">
+                            <div class="space-y-1 border-l-2 border-emerald-500 pl-4">
+                                <strong class="text-white block text-sm">AI Outputs are Signals, Not Deciders</strong>
+                                <p>An algorithm calculates statistical correlation based on legacy data records. It is a powerful advisory sensor, not a corporate policymaker. Treating its output as a non-negotiable decision is a failure of leadership.</p>
+                            </div>
+
+                            <div class="space-y-1 border-l-2 border-emerald-500 pl-4">
+                                <strong class="text-white block text-sm">Automated Denial is a Compliance Trap</strong>
+                                <p>When a security system auto-denies travel to hostile locations for vulnerable groups, it doesn't protect the employee. Instead, it allows foreign discriminatory laws to dictate your internal global talent pipeline.</p>
+                            </div>
+
+                            <div class="space-y-1 border-l-2 border-emerald-500 pl-4">
+                                <strong class="text-white block text-sm">Duty of Care is Human-Centered</strong>
+                                <p>True corporate duty of care means analyzing legal risks (the signal) and executing custom physical solutions (the decision) to safely enable business—ensuring ethics and human safety maintain the final word.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-security-border/50">
+                        <button onclick="transitionTo('screen-conclusion')" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-3.5 px-4 rounded-lg text-xs flex items-center justify-center gap-2 transition-all hover:scale-[1.01] shadow-lg shadow-emerald-950/20 glow-emerald">
+                            Commit overriding brief to Workshop Ledger <i class="fa-solid fa-circle-check"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 6: Conclusion & Debrief -->
+        <section id="screen-conclusion" class="hidden space-y-6 max-w-3xl mx-auto py-6">
+            <div class="bg-security-panel rounded-2xl border border-security-border p-8 sm:p-12 space-y-6 relative overflow-hidden text-center">
+                <div class="h-16 w-16 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20 flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-graduation-cap text-2xl"></i>
+                </div>
+                
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Workshop Module Concluded</h2>
+                
+                <p class="text-security-muted text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
+                    You have successfully analyzed, exposed, and constructively overridden the automated system's hidden biases using the Challenger Framework.
+                </p>
+
+                <!-- Workshop Key Takeaways Frame -->
+                <div class="bg-slate-900/80 p-6 rounded-xl border border-security-border text-left space-y-4">
+                    <span class="text-xs font-mono text-emerald-400 uppercase font-bold tracking-wider block text-center sm:text-left">Your Workshop Key Takeaways:</span>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-security-panel/50 p-3 rounded border border-security-border/50 space-y-1">
+                            <strong class="text-white text-xs block">1. Audit datasets first</strong>
+                            <span class="text-[11px] text-security-muted block">Query database timelines, sample sizes, and reporting filters. Precision does not equal accuracy.</span>
+                        </div>
+                        <div class="bg-security-panel/50 p-3 rounded border border-security-border/50 space-y-1">
+                            <strong class="text-white text-xs block">2. Counterfactual test</strong>
+                            <span class="text-[11px] text-security-muted block">Construct alternate queries swapping individual proxy variables to expose implicit demographic profiling.</span>
+                        </div>
+                        <div class="bg-security-panel/50 p-3 rounded border border-security-border/50 space-y-1">
+                            <strong class="text-white text-xs block">3. Safety enables business</strong>
+                            <span class="text-[11px] text-security-muted block">Present proactive operational plans to handle travel safety, instead of binary rejections.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-security-border/50 flex flex-col sm:flex-row justify-center items-center gap-3">
+                    <button onclick="resetSimulator()" class="w-full sm:w-auto bg-slate-800 text-security-muted hover:text-white border border-security-border font-medium text-xs px-5 py-3 rounded-lg transition-colors">
+                        <i class="fa-solid fa-rotate-left mr-1"></i> Restart Workshop Deck
+                    </button>
+                    <button onclick="openFeedbackModal()" class="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold text-xs px-6 py-3 rounded-lg transition-all shadow-md shadow-emerald-950/20">
+                        Submit Facilitator Feedback <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Custom Modal for Feedback/Notifications (Replaces raw Window Alerts) -->
+    <div id="feedback-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-security-panel border border-security-border p-6 rounded-2xl max-w-md w-full space-y-4 glow-accent relative z-[60]">
+            <div class="h-12 w-12 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center text-xl">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white">Workshop Analytics Completed</h3>
+            <p class="text-xs text-security-muted leading-relaxed">
+                The mock workshop feedback loop and facilitator analytics have been compiled and logged successfully. 
+                In a production environment, this integrates directly with your LMS to map risk management learning paths.
+            </p>
+            <div class="flex justify-end pt-2">
+                <button onclick="closeFeedbackModal()" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-colors">
+                    Acknowledge & Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Progress bar indicator -->
+    <footer class="border-t border-security-border bg-security-panel/40 py-4 px-4 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+            <span class="text-xs text-security-muted font-mono">VERITAS Security Workshop Kit - © 2026</span>
+            
+            <!-- Step Indicator Tracker -->
+            <div class="flex items-center gap-2">
+                <span id="step-dot-1" class="h-2 w-8 rounded-full bg-blue-500 transition-all duration-300"></span>
+                <span id="step-dot-2" class="h-2 w-2 rounded-full bg-slate-800 transition-all duration-300"></span>
+                <span id="step-dot-3" class="h-2 w-2 rounded-full bg-slate-800 transition-all duration-300"></span>
+                <span id="step-dot-4" class="h-2 w-2 rounded-full bg-slate-800 transition-all duration-300"></span>
+                <span id="step-dot-5" class="h-2 w-2 rounded-full bg-slate-800 transition-all duration-300"></span>
+                <span id="step-dot-6" class="h-2 w-2 rounded-full bg-slate-800 transition-all duration-300"></span>
+                <span id="step-dot-7" class="h-2 w-2 rounded-full bg-slate-800 transition-all duration-300"></span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Simulator Controller -->
+    <script>
+        // Track states
+        let votes = { A: null, B: null, C: null };
+        let sandboxState = 'lgbtq';
+        let provenanceScanned = false;
+        let activeMitigations = 0;
+
+        function transitionTo(screenId) {
+            // Hide all sections
+            ['screen-intro', 'screen-dossiers', 'screen-polling', 'screen-reveal', 'screen-challenger', 'screen-reframe', 'screen-conclusion'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+
+            // Show active section
+            document.getElementById(screenId).classList.remove('hidden');
+
+            // Update footer tracker dots
+            updateProgressDots(screenId);
+
+            // Conditional triggers
+            if (screenId === 'screen-polling') {
+                populatePollingScreenVotes();
+            }
+            if (screenId === 'screen-reframe') {
+                populateGeneratedBrief();
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Vote handlers
+        function vote(traveller, decision) {
+            votes[traveller] = decision;
+
+            const buttons = document.querySelectorAll(`.vote-btn-${traveller}`);
+            buttons.forEach(btn => {
+                btn.className = `vote-btn-${traveller} border border-security-border hover:bg-slate-800 text-xs py-2 px-1 text-center rounded-lg transition-all duration-200 text-security-muted`;
+            });
+
+            const selectedBtn = document.getElementById(`btn-${traveller}-${decision}`);
+            if (decision === 'approve') {
+                selectedBtn.className = `vote-btn-${traveller} border-2 border-emerald-500 bg-emerald-500/10 text-emerald-400 text-xs py-2 px-1 text-center rounded-lg font-bold transition-all duration-200 glow-emerald`;
+            } else if (decision === 'hold') {
+                selectedBtn.className = `vote-btn-${traveller} border-2 border-amber-500 bg-amber-500/10 text-amber-400 text-xs py-2 px-1 text-center rounded-lg font-bold transition-all duration-200 glow-amber`;
+            } else if (decision === 'deny') {
+                selectedBtn.className = `vote-btn-${traveller} border-2 border-rose-500 bg-rose-500/10 text-rose-400 text-xs py-2 px-1 text-center rounded-lg font-bold transition-all duration-200 glow-rose`;
+            }
+
+            if (votes.A && votes.B && votes.C) {
+                const submitBtn = document.getElementById('btn-submit-votes');
+                submitBtn.disabled = false;
+                submitBtn.className = "w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm px-8 py-3.5 rounded-lg transition-all duration-200 glow-accent hover:scale-[1.01] cursor-pointer flex items-center justify-center gap-2";
+            }
+        }
+
+        function populatePollingScreenVotes() {
+            const formatText = (val) => {
+                if (val === 'approve') return '<span class="text-emerald-400"><i class="fa-solid fa-circle-check"></i> Approve</span>';
+                if (val === 'hold') return '<span class="text-amber-400"><i class="fa-solid fa-circle-question"></i> Hold / Info</span>';
+                if (val === 'deny') return '<span class="text-rose-400"><i class="fa-solid fa-circle-xmark"></i> Reject</span>';
+                return '-';
+            };
+
+            document.getElementById('user-vote-A').innerHTML = formatText(votes.A);
+            document.getElementById('user-vote-B').innerHTML = formatText(votes.B);
+            document.getElementById('user-vote-C').innerHTML = formatText(votes.C);
+        }
+
+        // Populates checkboxes to the clean C-Suite white memo with soft language mapping
+        function populateGeneratedBrief() {
+            const listContainer = document.getElementById('dynamic-brief-mitigations');
+            listContainer.innerHTML = ''; // reset
+
+            let count = 0;
+            if (document.getElementById('mit-1').checked) {
+                listContainer.innerHTML += `<li>Pre-arranged airport transfer with a vetted provider</li>`;
+                count++;
+            }
+            if (document.getElementById('mit-2').checked) {
+                listContainer.innerHTML += `<li>Accommodation in a secure, company-approved location</li>`;
+                count++;
+            }
+            
+            // Standard enhanced tracker support (Active default)
+            listContainer.innerHTML += `<li>Enhanced traveller support and monitoring</li>`;
+            
+            if (document.getElementById('mit-3').checked) {
+                listContainer.innerHTML += `<li>Scheduled check-ins every 12 hours throughout the trip</li>`;
+                count++;
+            }
+
+            // Standard response escalation (Active default)
+            listContainer.innerHTML += `<li>Local escalation and response procedures in place if required</li>`;
+        }
+
+        // Counterfactual Simulator Logic
+        function toggleCounterfactual(type) {
+            sandboxState = type;
+            const btnLgbtq = document.getElementById('toggle-lgbtq');
+            const btnStandard = document.getElementById('toggle-standard');
+            const outPanel = document.getElementById('sandbox-output');
+            const badge = document.getElementById('sandbox-badge');
+            const risk = document.getElementById('sandbox-risk');
+            const conf = document.getElementById('sandbox-conf');
+
+            if (type === 'lgbtq') {
+                btnLgbtq.className = "py-2 px-3 border border-emerald-500 bg-emerald-500/10 text-emerald-400 font-bold rounded-lg text-center transition-all duration-200";
+                btnStandard.className = "py-2 px-3 border border-security-border hover:bg-slate-800 text-security-muted rounded-lg text-center transition-all duration-200";
+                
+                outPanel.className = "bg-rose-950/20 border border-rose-900/40 p-4 rounded-lg space-y-3 transition-all duration-300";
+                badge.className = "text-[10px] font-mono font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20 px-1.5 py-0.5 rounded";
+                badge.innerText = "DENY";
+                risk.className = "font-bold text-rose-400";
+                risk.innerText = "HIGH RISK";
+                conf.className = "font-mono font-bold text-rose-400";
+                conf.innerText = "91%";
+            } else {
+                btnLgbtq.className = "py-2 px-3 border border-security-border hover:bg-slate-800 text-security-muted rounded-lg text-center transition-all duration-200";
+                btnStandard.className = "py-2 px-3 border border-emerald-500 bg-emerald-500/10 text-emerald-400 font-bold rounded-lg text-center transition-all duration-200";
+                
+                outPanel.className = "bg-emerald-950/20 border border-emerald-900/40 p-4 rounded-lg space-y-3 transition-all duration-300";
+                badge.className = "text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-1.5 py-0.5 rounded";
+                badge.innerText = "APPROVED";
+                risk.className = "font-bold text-emerald-400";
+                risk.innerText = "LOW RISK";
+                conf.className = "font-mono font-bold text-emerald-400";
+                conf.innerText = "94%";
+            }
+            evaluateChallengerState();
+        }
+
+        // Scan Data Provenance
+        function scanProvenance() {
+            provenanceScanned = true;
+            document.getElementById('provenance-placeholder').classList.add('hidden');
+            const dataSec = document.getElementById('provenance-data');
+            dataSec.classList.remove('hidden');
+
+            const scanBtn = document.getElementById('btn-scan');
+            scanBtn.className = "w-full bg-emerald-600/10 text-emerald-400 border-2 border-emerald-500 py-2.5 px-4 rounded-lg text-xs font-bold flex items-center justify-center gap-2 cursor-default";
+            scanBtn.innerHTML = "<i class='fa-solid fa-circle-check'></i> Provenance Scan Completed";
+            scanBtn.disabled = true;
+
+            evaluateChallengerState();
+        }
+
+        // Evaluate Mitigation inputs
+        function updateMitigationCount() {
+            let count = 0;
+            if (document.getElementById('mit-1').checked) count++;
+            if (document.getElementById('mit-2').checked) count++;
+            if (document.getElementById('mit-3').checked) count++;
+            activeMitigations = count;
+            evaluateChallengerState();
+        }
+
+        // Evaluate overall Challenger Sandbox Progress
+        function evaluateChallengerState() {
+            const statusLabel = document.getElementById('challenger-status');
+            const exportBtn = document.getElementById('btn-export');
+
+            // Set current state labels
+            if (sandboxState === 'standard' && provenanceScanned && activeMitigations >= 2) {
+                statusLabel.innerText = "Ready to Export Override";
+                statusLabel.className = "text-emerald-400 font-bold";
+                exportBtn.disabled = false;
+                exportBtn.className = "w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-lg text-xs flex items-center justify-center gap-2 cursor-pointer transition-all hover:scale-[1.01] glow-emerald";
+            } else {
+                statusLabel.innerText = "Diagnostics Incomplete";
+                statusLabel.className = "text-amber-500 font-semibold";
+                exportBtn.disabled = true;
+                exportBtn.className = "w-full bg-slate-800 text-slate-500 border border-security-border py-3 px-4 rounded-lg text-xs font-bold flex items-center justify-center gap-2 cursor-not-allowed transition-all";
+                
+                // Detailed progress label
+                let missing = [];
+                if (sandboxState !== 'standard') missing.push("Run Counterfactual");
+                if (!provenanceScanned) missing.push("Audit Provenance");
+                if (activeMitigations < 2) missing.push("2+ Mitigations");
+                
+                statusLabel.innerText = `${missing.join(" | ")}`;
+            }
+        }
+
+        // Modal triggers
+        function openFeedbackModal() {
+            document.getElementById('feedback-modal').classList.remove('hidden');
+        }
+
+        function closeFeedbackModal() {
+            document.getElementById('feedback-modal').classList.add('hidden');
+        }
+
+        // Reset all states
+        function resetSimulator() {
+            votes = { A: null, B: null, C: null };
+            sandboxState = 'lgbtq';
+            provenanceScanned = false;
+            activeMitigations = 0;
+
+            // Reset buttons styling states
+            ['A', 'B', 'C'].forEach(tr => {
+                const buttons = document.querySelectorAll(`.vote-btn-${tr}`);
+                buttons.forEach(btn => {
+                    btn.className = `vote-btn-${tr} border border-security-border hover:bg-slate-800 text-xs py-2 px-1 text-center rounded-lg transition-all duration-200 text-security-muted`;
+                });
+            });
+
+            // Disable submissions button
+            const submitBtn = document.getElementById('btn-submit-votes');
+            submitBtn.disabled = true;
+            submitBtn.className = "w-full sm:w-auto bg-slate-800 text-slate-500 border border-security-border font-medium text-sm px-8 py-3.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 cursor-not-allowed";
+
+            // Reset sandbox widgets
+            toggleCounterfactual('lgbtq');
+            
+            // Re-enable provenance button
+            const scanBtn = document.getElementById('btn-scan');
+            scanBtn.className = "w-full bg-slate-800 hover:bg-slate-700 text-white border border-security-border py-2.5 px-4 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-colors";
+            scanBtn.innerHTML = "<i class='fa-solid fa-magnifying-glass-chart'></i> Scan Underlying Database Records";
+            scanBtn.disabled = false;
+            document.getElementById('provenance-placeholder').classList.remove('hidden');
+            document.getElementById('provenance-data').classList.add('hidden');
+
+            // Uncheck mitigations
+            document.getElementById('mit-1').checked = false;
+            document.getElementById('mit-2').checked = false;
+            document.getElementById('mit-3').checked = false;
+
+            evaluateChallengerState();
+            transitionTo('screen-intro');
+        }
+
+        // Progress Dots controller
+        function updateProgressDots(screenId) {
+            const stepsMap = {
+                'screen-intro': 1,
+                'screen-dossiers': 2,
+                'screen-polling': 3,
+                'screen-reveal': 4,
+                'screen-challenger': 5,
+                'screen-reframe': 6,
+                'screen-conclusion': 7
+            };
+            const activeStep = stepsMap[screenId] || 1;
+
+            for (let i = 1; i <= 7; i++) {
+                const dot = document.getElementById(`step-dot-${i}`);
+                if (i === activeStep) {
+                    dot.className = "h-2 w-8 rounded-full bg-blue-500 transition-all duration-300";
+                } else {
+                    dot.className = "h-2 w-2 rounded-full bg-slate-800 transition-all duration-300";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
